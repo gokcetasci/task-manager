@@ -3,12 +3,15 @@ import AddTask from "./AddTask";
 import Modal from "./Modal";
 import TaskList from "./TaskList";
 import AddCategory from "./AddCategory";
+import ConfirmModal from "./ConfirmModal";
 
 function Homepage() {
   const [tasks, setTasks] = useState([]); // Tasklerin tutulduğu durum
   const [isAddTaskModalOpen, setIsAddTaskModalOpen] = useState(false); // Task ekleme modalının açık olup olmadığını tutma
   const [categories, setCategories] = useState([]); // Kategorilerin tutulduğu durum
   const [isCategoryModalOpen, setIsCategoryModalOpen] = useState(false); // Category ekleme modalının açık olup olmadığını tutma
+  const [taskToDelete, setTaskToDelete] = useState(null); // Task silme işleminin tutulduğu durum
+  const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false); // Task silme işleminin onay modalının açık olup olmadığını tutan durum
 
   // Sayfa yüklendiğinde localden taskleri yükle
   useEffect(() => {
@@ -35,22 +38,48 @@ function Homepage() {
 
   // Yeni task ekleme fonksiyonu
   const addTask = (title, description, category) => {
-    const newTask = { title, description, category }; // Yeni task
+    const newTask = { id: Date.now(), title, description, category };
     setIsAddTaskModalOpen(false); // Task ekledikten sonra modalı kapat
     setTasks([...tasks, newTask]); // Yeni task'i mevcut tasklere ekle
   };
 
   // Yeni kategori ekleme
   const addCategory = (category) => {
-  // Eğer kategori listesinde belirtilen kategori yoksa
-  if (!categories.includes(category)) {
-    // Yeni kategoriyi mevcut kategorilere ekle ve durumu güncelle
-    setCategories([...categories, category]);
-  }
-  // Kategori ekleme modalını kapat
-  setIsCategoryModalOpen(false);
-};
+    // Eğer kategori listesinde belirtilen kategori yoksa
+    if (!categories.includes(category)) {
+      // Yeni kategoriyi mevcut kategorilere ekle ve durumu güncelle
+      setCategories([...categories, category]);
+    }
+    // Kategori ekleme modalını kapat
+    setIsCategoryModalOpen(false);
+  };
 
+  // Bir task silindiğinde çağrılan fonksiyon
+  const deleteTask = (id) => {
+    // Task listesini filtreleyerek verilen ID'ye sahip taski listeden çıkar
+    setTasks(tasks.filter((task) => task.id !== id));
+    // Task onay modalını kapat
+    setIsConfirmModalOpen(false);
+  };
+
+  // Task silme işlemi başlatmak için çağrılan fonksiyon
+  const handleDeleteTask = (task) => {
+    // Silinecek taski durum değişkenine ata
+    setTaskToDelete(task);
+    // Silme onay modalını aç
+    setIsConfirmModalOpen(true);
+  };
+
+  // Silme işlemini onaylamak için çağrılan fonksiyon
+  const confirmDeleteTask = () => {
+    // Silinecek task varsa
+    if (taskToDelete) {
+      // Taski sil
+      deleteTask(taskToDelete.id);
+      // Silinecek taski durum değişkeninden temizle
+      setTaskToDelete(null);
+    }
+  };
 
   return (
     <div id="homepage">
@@ -78,8 +107,16 @@ function Homepage() {
       </div>
       <div id="tasklistsection">
         {/* TaskList ile görevleri listele */}
-        <TaskList tasks={tasks} />
+        <TaskList tasks={tasks} deleteTask={handleDeleteTask} />
       </div>
+
+      {/* Silme İşlemi Onay Modal */}
+      {isConfirmModalOpen && (
+        <ConfirmModal
+          onConfirm={confirmDeleteTask}
+          onCancel={() => setIsConfirmModalOpen(false)}
+        />
+      )}
     </div>
   );
 }

@@ -52,7 +52,7 @@ const AddTask = ({ addTask, categories }) => {
               <option value="" disabled>
                 Select Category (Optional)
               </option>
-              {categories.map((cat, index) => (
+              {categories && categories.map((cat, index) => (
                 <option key={index} value={cat}>
                   {cat}
                 </option>
