@@ -1,7 +1,8 @@
 import React from "react";
 import { MdDeleteForever } from "react-icons/md";
+import { MdEdit } from "react-icons/md";
 
-const TaskList = ({ tasks, deleteTask }) => {
+const TaskList = ({ tasks, deleteTask, editTask }) => {
   return (
     <div id="tasklist">
       <table>
@@ -19,7 +20,10 @@ const TaskList = ({ tasks, deleteTask }) => {
               <td>{task.category}</td>
               <td>
                 <button onClick={() => deleteTask(task)}>
-                    <MdDeleteForever />
+                  <MdDeleteForever />
+                </button>
+                <button onClick={() => editTask(task)}>
+                  <MdEdit />
                 </button>
               </td>
             </tr>
@@ -28,6 +32,6 @@ const TaskList = ({ tasks, deleteTask }) => {
       </table>
     </div>
   );
-}
+};
 
 export default TaskList;

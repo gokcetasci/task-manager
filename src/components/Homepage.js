@@ -4,6 +4,7 @@ import Modal from "./Modal";
 import TaskList from "./TaskList";
 import AddCategory from "./AddCategory";
 import ConfirmModal from "./ConfirmModal";
+import EditTask from "./EditTask";
 
 function Homepage() {
   const [tasks, setTasks] = useState([]); // Tasklerin tutulduğu durum
@@ -12,6 +13,9 @@ function Homepage() {
   const [isCategoryModalOpen, setIsCategoryModalOpen] = useState(false); // Category ekleme modalının açık olup olmadığını tutma
   const [taskToDelete, setTaskToDelete] = useState(null); // Task silme işleminin tutulduğu durum
   const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false); // Task silme işleminin onay modalının açık olup olmadığını tutan durum
+  const [isEditTaskModalOpen, setIsEditTaskModalOpen] = useState(null); // Tasklerin edit modalının açık olup olmadığını tutan durum 
+  const [taskToEdit, setTaskToEdit] = useState(null); // Task editleme işleminin tutulduğu durum
+
 
   // Sayfa yüklendiğinde localden taskleri yükle
   useEffect(() => {
@@ -81,8 +85,22 @@ function Homepage() {
     }
   };
 
+  // Task düzenleme fonksiyonu
+  const editTask = (id, title, description, category) => {
+    setTasks(tasks.map(task => task.id === id ? { id, title, description, category } : task));
+    setIsEditTaskModalOpen(false); // Task düzenlendikten sonra modalı kapat
+  };
+
+ // Task düzenleme işlemi başlatmak için çağrılan fonksiyon
+ const handleEditTask = (task) => {
+    setTaskToEdit(task); // Düzenlenecek taski durum değişkenine ata
+    setIsEditTaskModalOpen(true); // Düzenleme modalını aç
+  };
+
+  
   return (
     <div id="homepage">
+
       <div id="addtasksbutton">
         {/* Task ekleme modalını açma butonu */}
         <button onClick={() => setIsAddTaskModalOpen(true)}>Add Task</button>
@@ -93,6 +111,7 @@ function Homepage() {
           </Modal>
         )}
       </div>
+
       <div id="addcategoriesbutton">
         {/* Kategori ekleme modalını açma butonu */}
         <button onClick={() => setIsCategoryModalOpen(true)}>
@@ -105,9 +124,10 @@ function Homepage() {
           </Modal>
         )}
       </div>
+
       <div id="tasklistsection">
         {/* TaskList ile görevleri listele */}
-        <TaskList tasks={tasks} deleteTask={handleDeleteTask} />
+        <TaskList tasks={tasks} deleteTask={handleDeleteTask} editTask={handleEditTask}/>
       </div>
 
       {/* Silme İşlemi Onay Modal */}
@@ -117,6 +137,14 @@ function Homepage() {
           onCancel={() => setIsConfirmModalOpen(false)}
         />
       )}
+      
+      {/* Task Editleme */}
+      {isEditTaskModalOpen && (
+        <Modal onClose={() => setIsEditTaskModalOpen(false)}>
+            <EditTask task={taskToEdit} editTask={editTask} categories={categories} closeModal={() => setIsEditTaskModalOpen(false)}/>
+        </Modal>
+      )}
+
     </div>
   );
 }
