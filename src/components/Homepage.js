@@ -42,7 +42,14 @@ function Homepage() {
 
   // Yeni task ekleme fonksiyonu
   const addTask = (title, description, category) => {
-    const newTask = { id: Date.now(), title, description, category };
+    const newTask = {
+      id: Date.now(),
+      title,
+      description,
+      category,
+      status: "To Do",
+      completionDate: null,
+    };
     setIsAddTaskModalOpen(false); // Task ekledikten sonra modalı kapat
     setTasks([...tasks, newTask]); // Yeni task'i mevcut tasklere ekle
   };
@@ -61,9 +68,14 @@ function Homepage() {
   // Bir task silindiğinde çağrılan fonksiyon
   const deleteTask = (id) => {
     // Task listesini filtreleyerek verilen ID'ye sahip taski listeden çıkar
-    setTasks(tasks.filter((task) => task.id !== id));
+    const updatedTasks = tasks.filter((task) => task.id !== id);
+    setTasks(updatedTasks); // Güncellenmiş task listesini state'e set et
+
     // Task onay modalını kapat
     setIsConfirmModalOpen(false);
+
+    // Local storage'dan da güncellenmiş task listesini kaydet
+    localStorage.setItem("tasks", JSON.stringify(updatedTasks));
   };
 
   // Task silme işlemi başlatmak için çağrılan fonksiyon
@@ -96,6 +108,25 @@ function Homepage() {
     setTaskToEdit(task); // Düzenlenecek taski durum değişkenine ata
     setIsEditTaskModalOpen(true); // Düzenleme modalını aç
   };
+  
+  // Taskin tamamlandı ya da devam ediliyor durumunu kontrol etmek için eklenen fonksiyon. aynı zamanda ne zaman tamamlandığının bilgisi için. 
+  const updateTaskStatus = (id, status) => {
+    setTasks(
+      tasks.map((task) =>
+        task.id === id 
+          ? {
+              ...task, // Mevcut task'in tüm özelliklerini alıyoruz
+              status, // status alanını güncelliyoruz
+              completionDate:
+                status === "Completed" // Eğer status "Completed" ise
+                  ? new Date().toISOString() // Tamamlanma tarihini güncel tarih olarak ayarlıyoruz
+                  : null, // Değilse tamamlanma tarihini null olarak ayarlıyoruz
+            }
+          : task // Eğer task'in id'si değiştirmek istediğimiz task'in id'si ile aynı değilse, task'i olduğu gibi bırakıyoruz
+      )
+    );
+  };
+  
 
   
   return (
@@ -127,7 +158,12 @@ function Homepage() {
 
       <div id="tasklistsection">
         {/* TaskList ile görevleri listele */}
-        <TaskList tasks={tasks} deleteTask={handleDeleteTask} editTask={handleEditTask}/>
+        <TaskList
+          tasks={tasks}
+          deleteTask={handleDeleteTask}
+          editTask={handleEditTask}
+          updateTaskStatus={updateTaskStatus}
+        />
       </div>
 
       {/* Silme İşlemi Onay Modal */}
@@ -137,14 +173,18 @@ function Homepage() {
           onCancel={() => setIsConfirmModalOpen(false)}
         />
       )}
-      
+
       {/* Task Editleme */}
       {isEditTaskModalOpen && (
         <Modal onClose={() => setIsEditTaskModalOpen(false)}>
-            <EditTask task={taskToEdit} editTask={editTask} categories={categories} closeModal={() => setIsEditTaskModalOpen(false)}/>
+          <EditTask
+            task={taskToEdit}
+            editTask={editTask}
+            categories={categories}
+            closeModal={() => setIsEditTaskModalOpen(false)}
+          />
         </Modal>
       )}
-
     </div>
   );
 }
