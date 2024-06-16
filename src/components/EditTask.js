@@ -51,11 +51,12 @@ const EditTask = ({ task, editTask, categories, closeModal }) => {
               <option value="" disabled>
                 Select Category (Optional)
               </option>
-              {categories && categories.map((cat, index) => (
-                <option key={index} value={cat}>
-                  {cat}
-                </option>
-              ))}
+              {categories &&
+                categories.map((cat, index) => (
+                  <option key={index} value={cat.name}>
+                    {cat.name}
+                  </option>
+                ))}
             </Field>
           </div>
 

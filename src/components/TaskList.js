@@ -7,10 +7,12 @@ const TaskList = ({ tasks, deleteTask, editTask }) => {
     <div id="tasklist">
       <table>
         <thead>
-          <th>Title</th>
-          <th>Description</th>
-          <th>Category</th>
-          <th>Actions</th>
+          <tr>
+            <th>Title</th>
+            <th>Description</th>
+            <th>Category</th>
+            <th>Actions</th>
+          </tr>
         </thead>
         <tbody>
           {tasks.map((task) => (
