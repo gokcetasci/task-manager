@@ -53,8 +53,8 @@ const EditTask = ({ task, editTask, categories, closeModal }) => {
               </option>
               {categories &&
                 categories.map((cat, index) => (
-                  <option key={index} value={cat.name}>
-                    {cat.name}
+                  <option key={index} value={cat}>
+                    {cat}
                   </option>
                 ))}
             </Field>
