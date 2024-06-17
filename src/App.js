@@ -3,8 +3,10 @@ import Homepage from "./components/Homepage";
 
 function App() {
   return (
-    <div>
-        <Homepage/>
+    <div className="flex">
+      <div className="flex flex-col flex-grow">
+        <Homepage />
+      </div>
     </div>
   );
 }
