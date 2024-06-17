@@ -5,6 +5,8 @@ import TaskList from "./TaskList";
 import AddCategory from "./AddCategory";
 import ConfirmModal from "./ConfirmModal";
 import EditTask from "./EditTask";
+import { FaPlus } from "react-icons/fa";
+import Header from "./Header";
 
 function Homepage() {
   const [tasks, setTasks] = useState([]); // Tasklerin tutulduğu durum
@@ -126,44 +128,83 @@ function Homepage() {
       )
     );
   };
-  
 
-  
+  // Kategori silme işlemini gerçekleştiren fonksiyon
+  const deleteCategory = (category) => {
+    const updatedCategories = categories.filter((cat) => cat !== category);
+    setCategories(updatedCategories);
+    localStorage.setItem("categories", JSON.stringify(updatedCategories));
+  };
+
+  // Kategori düzenleme işlemini gerçekleştiren fonksiyon
+  const editCategory = (oldCategory, newCategory) => {
+    // Eski kategori adını yeni kategori adı ile değiştirme
+    const updatedCategories = categories.map((cat) =>
+      cat === oldCategory ? newCategory : cat
+    );
+    setCategories(updatedCategories);
+
+    // Kategorileri localStorage'a da güncelleme
+    localStorage.setItem("categories", JSON.stringify(updatedCategories));
+
+    // Taskleri de yeni kategori adı ile güncelleme
+    const updatedTasks = tasks.map((task) =>
+      task.category === oldCategory ? { ...task, category: newCategory } : task
+    );
+    setTasks(updatedTasks);
+
+    // Taskleri localStorage'a da güncelleme
+    localStorage.setItem("tasks", JSON.stringify(updatedTasks));
+  };
+
   return (
-    <div id="homepage">
+    <div id="homepage" className="flex">
+      <Header
+        setIsCategoryModalOpen={setIsCategoryModalOpen}
+        categories={categories}
+        deleteCategory={deleteCategory}
+        editCategory={editCategory}
+      />
 
-      <div id="addtasksbutton">
-        {/* Task ekleme modalını açma butonu */}
-        <button onClick={() => setIsAddTaskModalOpen(true)}>Add Task</button>
-        {/* addTaskModalOpen durumu true ise AddTask componentini içeren Modalı göster */}
-        {isAddTaskModalOpen && (
-          <Modal onClose={() => setIsAddTaskModalOpen(false)}>
-            <AddTask addTask={addTask} categories={categories} />
-          </Modal>
-        )}
-      </div>
+      <div className="flex flex-col flex-grow">
+        <div
+          id="buttons"
+          className="flex flex-row items-center justify-end gap-4 py-4 px-12 mt-10"
+        >
+          <div id="addtasksbutton">
+            {/* Task ekleme modalını açma butonu */}
+            <button
+              onClick={() => setIsAddTaskModalOpen(true)}
+              className="bg-gradient-to-r from-sky-500 to-blue-700 py-2 px-3 rounded-full flex flex-row text-white font-semibold hover:scale-105 transition-all duration-500 ease-out transform"
+            >
+              <span className="mr-9">Add New Task</span>
+              <span
+                className={`absolute -top-1 -right-2 text-white bg-gradient-to-r from-blue-700 to-sky-500 p-3 border-4 border-white rounded-full hover:scale-105 transition-all duration-500 ease-out transform`}
+              >
+                <FaPlus />
+              </span>
+            </button>
+            {/* addTaskModalOpen durumu true ise AddTask componentini içeren Modalı göster */}
+            {isAddTaskModalOpen && (
+              <Modal onClose={() => setIsAddTaskModalOpen(false)}>
+                <AddTask addTask={addTask} categories={categories} />
+              </Modal>
+            )}
+          </div>
+        </div>
 
-      <div id="addcategoriesbutton">
-        {/* Kategori ekleme modalını açma butonu */}
-        <button onClick={() => setIsCategoryModalOpen(true)}>
-          Add Category
-        </button>
-        {/* setIsCategoryModalOpen durumu true ise AddCategories componentini içeren Modalı göster */}
-        {isCategoryModalOpen && (
-          <Modal onClose={() => setIsCategoryModalOpen(false)}>
-            <AddCategory addCategory={addCategory} />
-          </Modal>
-        )}
-      </div>
-
-      <div id="tasklistsection">
-        {/* TaskList ile görevleri listele */}
-        <TaskList
-          tasks={tasks}
-          deleteTask={handleDeleteTask}
-          editTask={handleEditTask}
-          updateTaskStatus={updateTaskStatus}
-        />
+        <div
+          id="tasklistsection"
+          className="flex items-center justify-center my-5"
+        >
+          {/* TaskList ile görevleri listele */}
+          <TaskList
+            tasks={tasks}
+            deleteTask={handleDeleteTask}
+            editTask={handleEditTask}
+            updateTaskStatus={updateTaskStatus}
+          />
+        </div>
       </div>
 
       {/* Silme İşlemi Onay Modal */}
@@ -183,6 +224,13 @@ function Homepage() {
             categories={categories}
             closeModal={() => setIsEditTaskModalOpen(false)}
           />
+        </Modal>
+      )}
+
+      {/* Add Category Modal */}
+      {isCategoryModalOpen && (
+        <Modal onClose={() => setIsCategoryModalOpen(false)}>
+          <AddCategory addCategory={addCategory} />
         </Modal>
       )}
     </div>
