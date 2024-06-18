@@ -3,11 +3,14 @@ import { MdDeleteForever, MdEdit } from "react-icons/md";
 import { HiDotsVertical } from "react-icons/hi";
 import Select from "react-select";
 import { FcDocument } from "react-icons/fc";
+import DetailTask from "./DetailTask";
 
 const TaskList = ({ tasks, deleteTask, editTask, updateTaskStatus }) => {
   const [currentPage, setCurrentPage] = useState(1); // Mevcut sayfa numarası
   const [totalPages, setTotalPages] = useState(1); // Toplam sayfa sayısı
   const tasksPerPage = 6; // Sayfa başına gösterilecek task sayısı
+  const [showDetail, setShowDetail] = useState(false); // Detayın gösterilip gösterilmeyeceğini tutan state
+  const [selectedTask, setSelectedTask] = useState(null); // Gösterilen taskin bilgisi
 
   // React Select için seçeneklerin listesi
   const statusOptions = [
@@ -82,6 +85,23 @@ const TaskList = ({ tasks, deleteTask, editTask, updateTaskStatus }) => {
   const indexOfFirstTask = indexOfLastTask - tasksPerPage; // İlk taskin index'i
   const currentTasks = tasks.slice(indexOfFirstTask, indexOfLastTask); // Mevcut sayfadaki taskleri al
 
+  useEffect(() => {
+    // İlk yüklendiğinde mevcut sayfa numarasını 1 olarak ayarla
+    setCurrentPage(1);
+  }, []);
+
+  // DetailTask'i açan fonksiyon
+  const openDetail = (task) => {
+    setSelectedTask(task);
+    setShowDetail(true);
+  };
+
+  // DetailTask'i kapatan fonksiyon
+  const closeDetail = () => {
+    setShowDetail(false);
+    setSelectedTask(null);
+  };
+
   return (
     <div id="tasklist">
       <div className="h-[450px] ">
@@ -145,9 +165,10 @@ const TaskList = ({ tasks, deleteTask, editTask, updateTaskStatus }) => {
                 </td>
                 <td className="px-5 py-3 text-center max-w-[100px]">
                   <div className="flex flex-row gap-2 items-center justify-center">
-                    <button>
+                    <button onClick={() => openDetail(task)}>
                       <FcDocument className="fill-blue-500 w-6 h-6 hover:scale-110 transition-all duration-500 ease-in-out transform" />
                     </button>
+
                     <button onClick={() => editTask(task)}>
                       <MdEdit className="fill-blue-500 w-6 h-6 hover:scale-110 transition-all duration-500 ease-in-out transform" />
                     </button>
@@ -183,6 +204,10 @@ const TaskList = ({ tasks, deleteTask, editTask, updateTaskStatus }) => {
           </ul>
         </nav>
       </div>
+
+      {showDetail && selectedTask && (
+        <DetailTask task={selectedTask} onClose={closeDetail} />
+      )}
     </div>
   );
 };
