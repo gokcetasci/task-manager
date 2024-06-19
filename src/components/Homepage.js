@@ -7,6 +7,8 @@ import ConfirmModal from "./ConfirmModal";
 import EditTask from "./EditTask";
 import { FaPlus } from "react-icons/fa";
 import Header from "./Header";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function Homepage() {
   const [tasks, setTasks] = useState([]); // Tasklerin tutulduğu durum
@@ -54,6 +56,7 @@ function Homepage() {
     };
     setIsAddTaskModalOpen(false); // Task ekledikten sonra modalı kapat
     setTasks([...tasks, newTask]); // Yeni task'i mevcut tasklere ekle
+    toast.success("Task added successfully!");
   };
 
   // Yeni kategori ekleme
@@ -65,6 +68,8 @@ function Homepage() {
     }
     // Kategori ekleme modalını kapat
     setIsCategoryModalOpen(false);
+    toast.success("Category added successfully!");
+
   };
 
   // Bir task silindiğinde çağrılan fonksiyon
@@ -78,6 +83,8 @@ function Homepage() {
 
     // Local storage'dan da güncellenmiş task listesini kaydet
     localStorage.setItem("tasks", JSON.stringify(updatedTasks));
+    toast.success("Task deleted successfully!");
+
   };
 
   // Task silme işlemi başlatmak için çağrılan fonksiyon
@@ -103,6 +110,8 @@ function Homepage() {
   const editTask = (id, title, description, category) => {
     setTasks(tasks.map(task => task.id === id ? { id, title, description, category } : task));
     setIsEditTaskModalOpen(false); // Task düzenlendikten sonra modalı kapat
+    toast.success("Task edited successfully!");
+
   };
 
  // Task düzenleme işlemi başlatmak için çağrılan fonksiyon
@@ -127,6 +136,7 @@ function Homepage() {
           : task // Eğer task'in id'si değiştirmek istediğimiz task'in id'si ile aynı değilse, task'i olduğu gibi bırakıyoruz
       )
     );
+    toast.success("Status changed!");
   };
 
   // Kategori silme işlemini gerçekleştiren fonksiyon
@@ -134,6 +144,8 @@ function Homepage() {
     const updatedCategories = categories.filter((cat) => cat !== category);
     setCategories(updatedCategories);
     localStorage.setItem("categories", JSON.stringify(updatedCategories));
+    toast.success("Category deleted successfully!");
+
   };
 
   // Kategori düzenleme işlemini gerçekleştiren fonksiyon
@@ -155,6 +167,7 @@ function Homepage() {
 
     // Taskleri localStorage'a da güncelleme
     localStorage.setItem("tasks", JSON.stringify(updatedTasks));
+    toast.success("Category edited successfully!");
   };
 
   return (
@@ -235,6 +248,8 @@ function Homepage() {
           <AddCategory addCategory={addCategory} />
         </Modal>
       )}
+
+      <ToastContainer />
     </div>
   );
 }
