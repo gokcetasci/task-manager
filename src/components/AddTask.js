@@ -31,12 +31,12 @@ const AddTask = ({ addTask, categories }) => {
   };
 
   return (
-    <div className="mx-10 flex flex-col gap-6">
+    <div className="mx-10 flex flex-col gap-6 text-[12px] lg:text-[16px]">
       <div className="flex flex-row items-center gap-2">
         <span>
           <BiTask className="w-6 h-6 fill-cyan-600"/>
         </span>
-        <h1 className="text-[22px] font-bold text-cyan-500">Add New Task</h1>
+        <h1 className="text-[16px] lg:text-[22px] font-bold text-cyan-500">Add New Task</h1>
       </div>
       <div>
         <Formik
@@ -48,7 +48,7 @@ const AddTask = ({ addTask, categories }) => {
             <Form className="flex flex-col gap-4">
               {/* Başlık alanı */}
               <div className="flex flex-col gap-2">
-                <span className="text-[18px] text-gray-600 font-semibold  ">
+                <span className="text-[12px] lg:text-[18px] text-gray-600 font-semibold  ">
                   Title:
                 </span>
                  <Field
@@ -74,14 +74,14 @@ const AddTask = ({ addTask, categories }) => {
 
               {/* Açıklama alanı */}
               <div className="flex flex-col gap-2">
-                <span className="text-[18px] text-gray-600 font-semibold  ">
+                <span className="text-[12px] lg:text-[18px]  text-gray-600 font-semibold  ">
                   Description:
                 </span>
                 <Field
                   as="textarea"
                   name="description"
                   placeholder="Task Description"
-                  className="w-96 resize-none min-h-24 max-h-24 rounded-md px-4 border border-2 border-cyan-400 text-gray-700 outline-none hover:border-blue-400 p-1 transition-all ease-in-out duration-500 transform"
+                  className="md:w-96 resize-none min-h-24 max-h-24 rounded-md px-4 border border-2 border-cyan-400 text-gray-700 outline-none hover:border-blue-400 p-1 transition-all ease-in-out duration-500 transform"
                   value={values.description}
                   onChange={(e) => {
                     const formattedValue = capitalizeFirstLetter(e.target.value);
@@ -92,7 +92,7 @@ const AddTask = ({ addTask, categories }) => {
 
               {/* Kategori seçme alanı */}
               <div className="flex flex-col gap-2">
-                <span className="text-[18px] text-gray-600 font-semibold  ">
+                <span className="text-[12px] lg:text-[18px]  text-gray-600 font-semibold  ">
                   Category:
                 </span>
                 <Field
@@ -116,7 +116,7 @@ const AddTask = ({ addTask, categories }) => {
               <div className="pt-6 text-end">
                 <button
                   type="submit"
-                  className="py-2 px-6 bg-cyan-700 rounded-full text-white font-bold text-[18px] hover:bg-blue-400 hover:scale-105 transition-all duration-500 ease-in-out transform"
+                  className="py-2 px-6 bg-cyan-700 rounded-full text-white font-bold text-[12px] lg:text-[18px] hover:bg-blue-400 hover:scale-105 transition-all duration-500 ease-in-out transform"
                   >
                   Save
                 </button>

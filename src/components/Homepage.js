@@ -158,28 +158,30 @@ function Homepage() {
   };
 
   return (
-    <div id="homepage" className="flex">
+    <div id="homepage" className="flex flex-col md:flex-row h-screen">
+      <div className="flex">
       <Header
         setIsCategoryModalOpen={setIsCategoryModalOpen}
         categories={categories}
         deleteCategory={deleteCategory}
         editCategory={editCategory}
       />
+      </div>
 
-      <div className="flex flex-col flex-grow">
+      <div className="flex flex-col flex-grow mx-0 xl:mx-[50px] ">
         <div
           id="buttons"
-          className="flex flex-row items-center justify-end gap-4 py-4 px-12 mt-10"
+          className="flex flex-row items-center justify-end gap-4 py-4 px-6 md:px-12 mt-4 xl:mt-10"
         >
           <div id="addtasksbutton">
             {/* Task ekleme modalını açma butonu */}
             <button
               onClick={() => setIsAddTaskModalOpen(true)}
-              className="bg-gradient-to-r from-sky-500 to-blue-700 py-2 px-3 rounded-full flex flex-row text-white font-semibold hover:scale-105 transition-all duration-500 ease-out transform"
+              className="bg-blue-400 py-2 px-3 rounded-full flex flex-row text-white font-semibold hover:scale-105 transition-all duration-500 ease-out transform sm:mr-12 text-[12px] lg:text-[16px]"
             >
-              <span className="mr-9">Add New Task</span>
+              <span className="mr-7 lg:mr-9">Add New Task</span>
               <span
-                className={`absolute -top-1 -right-2 text-white bg-gradient-to-r from-blue-700 to-sky-500 p-3 border-4 border-white rounded-full hover:scale-105 transition-all duration-500 ease-out transform`}
+                className={`absolute -top-1 -right-2 text-white bg-gradient-to-r from-blue-700 to-sky-500 p-2.5 border-4 border-white rounded-full hover:scale-105 transition-all duration-500 ease-out transform`}
               >
                 <FaPlus />
               </span>

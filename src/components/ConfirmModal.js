@@ -4,14 +4,14 @@ import { GiCancel } from "react-icons/gi";
 function ConfirmModal({ onConfirm, onCancel }) {
   return (
     <div
-      className={`fixed top-0 left-0 w-full h-full flex items-center justify-center z-[1000]`}
+      className={`fixed top-0 left-0 w-full h-full flex items-center justify-center z-[1000] text-[12px] lg:text-[18px] `}
     >
       <div className="absolute w-full h-full bg-gray-900 opacity-50"></div>
       <div className="bg-white p-8 rounded-lg shadow-lg z-20 mx-5 sm:mx-0 flex flex-col items-center justify-center gap-3">
         <span>
           <GiCancel className="fill-red-500 w-12 h-12" />
         </span>
-        <p className="text-lg font-semibold my-4 text-center text-CustomGray">
+        <p className="text-[12px] lg:text--lg font-semibold my-4 text-center text-CustomGray">
         Are you sure you want to delete this task?
         </p>
         <div className="flex justify-center items-center gap-12">
